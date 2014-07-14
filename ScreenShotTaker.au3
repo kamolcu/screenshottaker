@@ -1,10 +1,10 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Icon=C:\Users\kamol\AppData\Local\Temp\_MEI35722\resources\images\photosfolder-winxp.ico
+#AutoIt3Wrapper_Icon=icon.ico
 #AutoIt3Wrapper_Outfile=ScreenShotTaker.exe
 #AutoIt3Wrapper_UseUpx=n
 #AutoIt3Wrapper_Res_Comment=ScreenShotTaker.exe by kamolcu@gmail.com
 #AutoIt3Wrapper_Res_Description=ScreenShotTaker.exe by kamolcu@gmail.com
-#AutoIt3Wrapper_Res_Fileversion=0.9.0.5
+#AutoIt3Wrapper_Res_Fileversion=0.9.0.6
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014 kamolcu@gmail.com dee-por.com
 #AutoIt3Wrapper_Res_Language=1033
