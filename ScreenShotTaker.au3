@@ -1,10 +1,9 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=icon.ico
 #AutoIt3Wrapper_Outfile=ScreenShotTaker.exe
-#AutoIt3Wrapper_UseUpx=n
 #AutoIt3Wrapper_Res_Comment=ScreenShotTaker.exe by kamolcu@gmail.com
 #AutoIt3Wrapper_Res_Description=ScreenShotTaker.exe by kamolcu@gmail.com
-#AutoIt3Wrapper_Res_Fileversion=0.9.0.6
+#AutoIt3Wrapper_Res_Fileversion=0.10.0.5
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014 kamolcu@gmail.com dee-por.com
 #AutoIt3Wrapper_Res_Language=1033
@@ -17,9 +16,9 @@
 ;
 ; Author    :	Kamol C.
 ;
-; Revision  :   9
+; Revision  :   10
 ;
-; Modtime   :	14 July 2014
+; Modtime   :	02:13 PM 07/16/2014 (Wednesday)
 ;
 ; Usage		: Run this program without argument will take the screenshot every 15 mins
 ;				  Run this program with single argument to specify period of taking screenshot (mins)
@@ -39,6 +38,7 @@
 ; Rev 8: Add destination path configuraion
 ;
 ; Rev9: Add key to capture screen when use Ctrl+LeftClick and add tray icon notification
+; Rev10: Add key to capture screen when use Alt+LeftClick and refactor code
 ; ----------------------------------------------------------------------------
 ; Include part
 ; ----------------------------------------------------------------------------
@@ -104,6 +104,8 @@ Func ConvertKeyCode($keyInput)
 			Return "79"
 		Case "Ctrl+LeftClick"
 			Return "Ctrl+LeftClick"
+		Case "Alt+LeftClick"
+			Return "Alt+LeftClick"
 		Case Else
 			Return ""
 	EndSwitch
@@ -193,20 +195,34 @@ If $loopflag Then
 		_ScreenCapture_Capture($ScreenShotFolder & "\" & @ComputerName & "_" & @YEAR & @MON & @MDAY & @HOUR & @MIN & @SEC & ".png", 0, 0, -1, -1, False)
 	WEnd
 Else
-	ConsoleWrite("No loop, waiting for F9" & @CRLF)
+	ConsoleWrite("No loop, waiting for trigger." & @CRLF)
 	Dim $dll
 	$dll = DllOpen("user32.dll")
 
 	While 1
+		$shotkey = IniRead(@ScriptDir & "\configure.ini", "main", "shotkey", "")
+		$opendirkey = IniRead(@ScriptDir & "\configure.ini", "main", "opendirkey", "")
+		$shotkey = ConvertKeyCode($shotkey)
+		$opendirkey = ConvertKeyCode($opendirkey)
+		$ScreenShotFolder = IniRead(@ScriptDir & "\configure.ini", "main", "desdir", "D:\ScreenShotTakerOutput")
 		Sleep(50)
-		If $shotkey = "Ctrl+LeftClick" Then
-			If _IsPressed("11", $dll) And _IsPressed("01", $dll) Then
+		If _IsPressed("11", $dll) Then
+			If $shotkey = "Ctrl+LeftClick" And _IsPressed("01", $dll) Then
+				CaptureScreenForCorrectKey($ScreenShotFolder, $active_win_flag, $clipFlag, $openmsFlag)
+			EndIf
+		ElseIf _IsPressed("12", $dll) Then
+			If $shotkey = "Alt+LeftClick" And _IsPressed("01", $dll) Then
 				CaptureScreenForCorrectKey($ScreenShotFolder, $active_win_flag, $clipFlag, $openmsFlag)
 			EndIf
 		ElseIf _IsPressed($shotkey, $dll) Then
 			CaptureScreenForCorrectKey($ScreenShotFolder, $active_win_flag, $clipFlag, $openmsFlag)
 		ElseIf _IsPressed($opendirkey, $dll) Then
+			If Not FileExists($ScreenShotFolder) Then
+				DirCreate($ScreenShotFolder)
+			EndIf
+			ConsoleWrite($opendirkey & " key pressed. Try to open " & $ScreenShotFolder & @CRLF)
 			$sCommand = "start " & """" & """" & " " & """" & $ScreenShotFolder & """"
+			ConsoleWrite($sCommand & @CRLF)
 			Run(@ComSpec & " /c " & """" & $sCommand & """", "", @SW_HIDE)
 		EndIf
 	WEnd
