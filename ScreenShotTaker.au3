@@ -3,7 +3,7 @@
 #AutoIt3Wrapper_Outfile=ScreenShotTaker.exe
 #AutoIt3Wrapper_Res_Comment=ScreenShotTaker.exe by kamolcu@gmail.com
 #AutoIt3Wrapper_Res_Description=ScreenShotTaker.exe by kamolcu@gmail.com
-#AutoIt3Wrapper_Res_Fileversion=0.10.0.5
+#AutoIt3Wrapper_Res_Fileversion=0.10.0.6
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014 kamolcu@gmail.com dee-por.com
 #AutoIt3Wrapper_Res_Language=1033
@@ -16,9 +16,9 @@
 ;
 ; Author    :	Kamol C.
 ;
-; Revision  :   10
+; Revision  :   11
 ;
-; Modtime   :	02:13 PM 07/16/2014 (Wednesday)
+; Modtime   :	02:16 AM 08/05/2014 (Tuesday)
 ;
 ; Usage		: Run this program without argument will take the screenshot every 15 mins
 ;				  Run this program with single argument to specify period of taking screenshot (mins)
@@ -39,6 +39,7 @@
 ;
 ; Rev9: Add key to capture screen when use Ctrl+LeftClick and add tray icon notification
 ; Rev10: Add key to capture screen when use Alt+LeftClick and refactor code
+; Rev11: Remove @SW_HIDE option
 ; ----------------------------------------------------------------------------
 ; Include part
 ; ----------------------------------------------------------------------------
@@ -223,7 +224,7 @@ Else
 			ConsoleWrite($opendirkey & " key pressed. Try to open " & $ScreenShotFolder & @CRLF)
 			$sCommand = "start " & """" & """" & " " & """" & $ScreenShotFolder & """"
 			ConsoleWrite($sCommand & @CRLF)
-			Run(@ComSpec & " /c " & """" & $sCommand & """", "", @SW_HIDE)
+			Run(@ComSpec & " /c " & """" & $sCommand & """", "")
 		EndIf
 	WEnd
 EndIf
